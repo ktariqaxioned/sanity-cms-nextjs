@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import {defineArrayMember, defineField, defineType} from 'sanity'
 
 export const postType = defineType({
   name: 'post',
@@ -30,6 +30,45 @@ export const postType = defineType({
       name: 'body',
       type: 'array',
       of: [{type: 'block'}],
+    }),
+    defineField({
+      name: 'badges',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'string',
+          options: {
+            list: [
+              { title: 'Featured', value: 'featured' },
+              { title: 'New', value: 'new' },
+              { title: 'Popular', value: 'popular' },
+              { title: 'Trending', value: 'trending' },
+              { title: 'Editor\'s Pick', value: 'editors-pick' },
+              { title: 'Technology', value: 'technology' },
+              { title: 'Science', value: 'science' },
+              { title: 'Health', value: 'health' },
+              { title: 'Business', value: 'business' },
+              { title: 'Education', value: 'education' },
+              { title: 'Entertainment', value: 'entertainment' },
+              { title: 'News', value: 'news' },
+              { title: 'Sports', value: 'sports' },
+              { title: 'Travel', value: 'travel' },
+              { title: 'Food', value: 'food' },
+              { title: 'Fashion', value: 'fashion' },
+              { title: 'Art', value: 'art' },
+              { title: 'Music', value: 'music' },
+              { title: 'Movies', value: 'movies' },
+              { title: 'TV', value: 'tv' },
+              { title: 'Books', value: 'books' },
+              { title: 'Politics', value: 'politics' },
+              { title: 'Environment', value: 'environment' },
+              { title: 'Comics', value: 'comics' },
+              { title: 'Games', value: 'games' },
+              { title: 'Other', value: 'other' },
+            ],
+          },
+        }),
+      ],
     }),
   ],
 })

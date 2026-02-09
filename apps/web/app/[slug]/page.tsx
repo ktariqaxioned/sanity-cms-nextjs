@@ -51,7 +51,7 @@ export default async function PostPage({
         </Button>
       </div>
 
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden pt-0">
         {postImageUrl && (
           <div className="relative w-full aspect-video overflow-hidden">
             <Image
@@ -65,12 +65,22 @@ export default async function PostPage({
         )}
 
         <CardHeader className="space-y-4">
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex flex-col gap-2 flex-wrap">
             {publishedDate && (
               <Badge variant="outline" className="gap-1.5">
                 <Calendar className="size-3" />
                 {publishedDate}
               </Badge>
+            )}
+
+            {post.badges && post.badges.length > 0 && (
+              <div className="flex flex-wrap gap-1.5">
+                {post.badges.map((badge) => (
+                  <Badge key={badge} variant="default" className="gap-1.5">
+                    {badge}
+                  </Badge>
+                ))}
+              </div>
             )}
           </div>
           <CardTitle className="text-3xl md:text-4xl lg:text-5xl leading-tight">

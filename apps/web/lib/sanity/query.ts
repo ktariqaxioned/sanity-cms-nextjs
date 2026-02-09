@@ -28,6 +28,7 @@ const POST_BASE_PROJECTION = groq`
   title,
   slug,
   publishedAt,
+  badges,
   ${IMAGE_PROJECTION}
 `;
 
@@ -94,6 +95,7 @@ export type SanityImage = {
     title: string;
     slug: Slug;
     publishedAt: string;
+    badges?: string[];
     image?: SanityImage;
   };
 

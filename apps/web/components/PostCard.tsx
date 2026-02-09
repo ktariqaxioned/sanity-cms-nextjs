@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Post } from "@/lib/sanity/query";
 
 const { projectId, dataset } = client.config();
@@ -48,6 +49,15 @@ export function PostCard({ post }: PostCardProps) {
           )}
           <CardHeader>
             <CardTitle className="text-xl">{post.title}</CardTitle>
+            {post.badges && post.badges.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mt-2">
+                {post.badges.map((badge) => (
+                  <Badge key={badge} variant="secondary" className="text-xs">
+                    {badge}
+                  </Badge>
+                ))}
+              </div>
+            )}
           </CardHeader>
           <CardFooter>
             <p className="text-sm text-muted-foreground">{publishedDate}</p>

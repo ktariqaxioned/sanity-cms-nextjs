@@ -4,11 +4,11 @@ import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
 
 export default defineConfig({
-  name: 'default',
-  title: 'experiment-1',
+  name: process.env.SANITY_STUDIO_NAME!,
+  title: process.env.SANITY_STUDIO_TITLE!,
 
-  projectId: 'oiozo98b',
-  dataset: 'production',
+  projectId: process.env.SANITY_STUDIO_PROJECT_ID!,
+  dataset: process.env.SANITY_STUDIO_DATASET!,
 
   plugins: [structureTool(), visionTool()],
 

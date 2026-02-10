@@ -30,6 +30,8 @@ export function structure(S: StructureBuilder) {
   return S.list()
     .title('Content')
     .items([
+      ...defaultDocTypes,
+      S.divider(),
       S.listItem()
         .title('Site Configuration')
         .child(
@@ -41,7 +43,6 @@ export function structure(S: StructureBuilder) {
               createSingleton(S, { type: 'settings', title: 'Global Settings' }),
             ])
         ),
-      S.divider(),
-      ...defaultDocTypes,
+      
     ])
 }

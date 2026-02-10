@@ -1,6 +1,8 @@
 import { defineType, defineField } from 'sanity'
+import { BookOpenIcon } from 'lucide-react'
 
 export const categoryType = defineType({
+  icon: BookOpenIcon,
   name: 'category',
   title: 'Category',
   type: 'document',

@@ -1,6 +1,8 @@
 import { defineArrayMember, defineField, defineType } from 'sanity'
+import { ListPlus } from 'lucide-react'
 
 export const postType = defineType({
+  icon: ListPlus,
   name: 'post',
   title: 'Post',
   type: 'document',

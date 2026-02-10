@@ -1,4 +1,6 @@
 import type { StructureBuilder } from 'sanity/structure'
+import type { LucideIcon } from 'lucide-react'
+import { Menu, PanelBottom, Settings2, SlidersHorizontal } from 'lucide-react'
 
 const SITE_CONFIG_TYPES = ['navbar', 'footer', 'settings']
 
@@ -10,16 +12,18 @@ function createSingleton(
   options: {
     type: string
     title: string
+    icon?: LucideIcon
   }
 ) {
-  const { type, title } = options
-  return S.listItem()
+  const { type, title, icon } = options
+  const item = S.listItem()
     .title(title)
     .child(
       S.document()
         .schemaType(type)
         .documentId(type)
     )
+  return icon ? item.icon(icon) : item
 }
 
 export function structure(S: StructureBuilder) {
@@ -34,13 +38,14 @@ export function structure(S: StructureBuilder) {
       S.divider(),
       S.listItem()
         .title('Site Configuration')
+        .icon(SlidersHorizontal)
         .child(
           S.list()
             .title('Site Configuration')
             .items([
-              createSingleton(S, { type: 'navbar', title: 'Navigation' }),
-              createSingleton(S, { type: 'footer', title: 'Footer' }),
-              createSingleton(S, { type: 'settings', title: 'Global Settings' }),
+              createSingleton(S, { type: 'navbar', title: 'Navigation', icon: Menu }),
+              createSingleton(S, { type: 'footer', title: 'Footer', icon: PanelBottom }),
+              createSingleton(S, { type: 'settings', title: 'Global Settings', icon: Settings2 }),
             ])
         ),
       

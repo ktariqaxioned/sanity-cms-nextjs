@@ -1,7 +1,8 @@
 import { PortableText } from "next-sanity";
 import { createImageUrlBuilder, SanityImageSource } from "@sanity/image-url";
 import { client } from "@/lib/sanity/client";
-import { POST_BY_SLUG_QUERY, type Post } from "@/lib/sanity/query";
+import { POST_BY_SLUG_QUERY, type POST_BY_SLUG_QUERY_RESULT } from "@/lib/sanity/query";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -33,11 +34,12 @@ export default async function PostPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const post = await client.fetch<Post>(
+  const post = await client.fetch<POST_BY_SLUG_QUERY_RESULT>(
     POST_BY_SLUG_QUERY,
     await params,
     options,
   );
+  if (!post) notFound();
   const postImageUrl = post.image
     ? urlFor(post.image)?.width(1200).height(675).url()
     : null;

@@ -10,6 +10,10 @@
     "build": "sanity build",
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
+    "schema:extract": "sanity schema extract",
+    "typegen": "sanity typegen generate",
+    "typegen:watch": "sanity typegen generate --watch",
+    "types": "sanity schema extract && sanity typegen generate",
     "lint": "eslint . --max-warnings 0",
     "check-types": "tsc --noEmit"
   },

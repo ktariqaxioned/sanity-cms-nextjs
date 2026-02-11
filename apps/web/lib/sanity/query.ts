@@ -1,10 +1,9 @@
 import { groq } from "next-sanity";
-import { type SanityDocument } from "next-sanity";
-
 
 /**
  * Common image projection used across post queries
  */
+// @sanity-typegen-ignore
 const IMAGE_PROJECTION = groq`
   image{
     asset->{
@@ -23,6 +22,7 @@ const IMAGE_PROJECTION = groq`
 /**
  * Base fields shared by all post queries
  */
+// @sanity-typegen-ignore
 const POST_BASE_PROJECTION = groq`
   _id,
   title,
@@ -74,49 +74,10 @@ export const POST_SLUGS_QUERY = groq`
     "slug": slug.current
   }
 `;
-/**
- * Type for a post in a list (without body content)
- */
-export type SanityImage = {
-    asset: {
-      _id: string;
-      url: string;
-      metadata?: {
-        dimensions?: {
-          width: number;
-          height: number;
-        };
-      };
-    };
-  };
-  
-  export type Slug = {
-    current: string;
-  };
 
-  export type PostListItem = SanityDocument & {
-    title: string;
-    slug: Slug;
-    publishedAt: string;
-    badges?: string[];
-    author?: { name: string; avatar?: SanityImage } | null;
-    categories?: { title: string }[] | null;
-    tags?: { title: string }[] | null;
-    image?: SanityImage;
-  };
-
-/**
- * Type for a full post (with body content)
- */
-export type Post = PostListItem & {
-    body?: Array<{
-      _type: string;
-      [key: string]: unknown;
-    }>;
-  };
-/**
- * Type for post slug
- */
-export type PostSlug = {
-  slug: string;
-};
+// Re-export generated TypeGen result types for convenience
+export type {
+  POSTS_QUERY_RESULT,
+  POST_BY_SLUG_QUERY_RESULT,
+  POST_SLUGS_QUERY_RESULT,
+} from "@/sanity.types";

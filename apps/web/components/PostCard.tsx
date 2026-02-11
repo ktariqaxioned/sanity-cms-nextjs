@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Post } from "@/lib/sanity/query";
+import type { POSTS_QUERY_RESULT } from "@/lib/sanity/query";
 import { Award, BookOpen, Tag, User } from "lucide-react";
 
 /** CMS badge value → display label (matches postType.ts options) */
@@ -29,7 +29,7 @@ const urlFor = (source: SanityImageSource) =>
     : null;
 
 type PostCardProps = {
-  post: Post;
+  post: POSTS_QUERY_RESULT[number];
 };
 
 export function PostCard({ post }: PostCardProps) {
@@ -42,7 +42,7 @@ export function PostCard({ post }: PostCardProps) {
     : null;
   return (
     <li>
-      <Link href={`/posts/${post.slug.current}`}>
+      <Link href={`/posts/${post.slug?.current ?? ""}`}>
         <Card className="transition-all hover:shadow-md hover:scale-[1.02] cursor-pointer h-full pt-0">
           {post.image?.asset && (
             <CardContent className="p-0">

@@ -75,8 +75,12 @@ export default async function PostPage({
 
             {post.badges && post.badges.length > 0 && (
               <div className="flex flex-wrap gap-1.5">
-                {post.badges.map((badge) => (
-                  <Badge key={badge} variant="default" className="gap-1.5">
+                {post.badges.map((badge, i) => (
+                  <Badge
+                    key={`${badge}-${i}`}
+                    variant="default"
+                    className="gap-1.5"
+                  >
                     {badge}
                   </Badge>
                 ))}

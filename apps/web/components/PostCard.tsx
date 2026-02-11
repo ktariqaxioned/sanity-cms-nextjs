@@ -51,8 +51,8 @@ export function PostCard({ post }: PostCardProps) {
             <CardTitle className="text-xl">{post.title}</CardTitle>
             {post.badges && post.badges.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-2">
-                {post.badges.map((badge) => (
-                  <Badge key={badge} variant="secondary" className="text-xs">
+                {post.badges.map((badge, i) => (
+                  <Badge key={`${badge}-${i}`} variant="secondary" className="text-xs">
                     {badge}
                   </Badge>
                 ))}

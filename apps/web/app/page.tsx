@@ -1,10 +1,20 @@
 import { client } from "@/lib/sanity/client";
 import { PostCard } from "@/components/PostCard";
 import { POSTS_QUERY, type PostListItem } from "@/lib/sanity/query";
+import { draftMode } from "next/headers";
 
-const options = { next: { revalidate: 30 } };
 export default async function Home() {
-  const posts = await client.fetch<PostListItem[]>(POSTS_QUERY, {}, options);
+  const { isEnabled } = await draftMode();
+  const posts = await client.fetch<PostListItem[]>(
+    POSTS_QUERY,
+    {},
+    {
+      perspective: isEnabled ? "previewDrafts" : "published",
+      next: {
+        revalidate: isEnabled ? 0 : 30,
+      },
+    },
+  );
   return (
     <main className="container mx-auto min-h-screen  p-8">
       <h1 className="text-4xl font-bold mb-8">Posts</h1>

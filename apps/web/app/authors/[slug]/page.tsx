@@ -1,3 +1,6 @@
+/**
+ * Author profile page: shows author bio and their posts by slug.
+ */
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";

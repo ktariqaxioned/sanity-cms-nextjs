@@ -22,6 +22,7 @@ export const postType = defineType({
       name: 'author',
       type: 'reference',
       to: [{ type: 'author' }],
+      validation: rule => rule.required(),
     }),
     defineField({
       name: 'publishedAt',

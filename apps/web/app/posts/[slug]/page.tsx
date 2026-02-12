@@ -1,7 +1,10 @@
 import { PortableText } from "next-sanity";
 import { createImageUrlBuilder, SanityImageSource } from "@sanity/image-url";
 import { client } from "@/lib/sanity/client";
-import { POST_BY_SLUG_QUERY, type POST_BY_SLUG_QUERY_RESULT } from "@/lib/sanity/query";
+import {
+  POST_BY_SLUG_QUERY,
+  type POST_BY_SLUG_QUERY_RESULT,
+} from "@/lib/sanity/query";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -12,13 +15,21 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Award, BookOpen, Calendar, Tag, User } from "lucide-react";
 
+/** Single post from POST_BY_SLUG_QUERY (non-null) */
+type Post = NonNullable<POST_BY_SLUG_QUERY_RESULT>;
+
 /** CMS badge value → display label (matches postType.ts options) */
-const BADGE_LABELS: Record<string, string> = {
+type BadgeValue = NonNullable<Post["badges"]>[number];
+const BADGE_LABELS: Record<BadgeValue, string> = {
   featured: "Featured",
   new: "New",
   popular: "Popular",
   trending: "Trending",
   "editors-pick": "Editor's Pick",
+};
+
+type PostPageProps = {
+  params: Promise<{ slug: string }>;
 };
 
 const { projectId, dataset } = client.config();
@@ -29,17 +40,14 @@ const urlFor = (source: SanityImageSource) =>
 
 const options = { next: { revalidate: 30 } };
 
-export default async function PostPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const post = await client.fetch<POST_BY_SLUG_QUERY_RESULT>(
+export default async function PostPage({ params }: PostPageProps) {
+  const raw = await client.fetch<POST_BY_SLUG_QUERY_RESULT>(
     POST_BY_SLUG_QUERY,
     await params,
     options,
   );
-  if (!post) notFound();
+  if (!raw) notFound();
+  const post: Post = raw;
   const postImageUrl = post.image
     ? urlFor(post.image)?.width(1200).height(675).url()
     : null;
@@ -120,7 +128,7 @@ export default async function PostPage({
                   className="size-3.5 shrink-0 text-muted-foreground"
                   aria-hidden
                 />
-                {post.badges.map((badge, i) => (
+                {post.badges.map((badge: BadgeValue, i: number) => (
                   <Badge
                     key={`${badge}-${i}`}
                     variant="default"
@@ -144,15 +152,17 @@ export default async function PostPage({
                       className="size-3.5 shrink-0 text-muted-foreground"
                       aria-hidden
                     />
-                    {post.categories.map((cat) => (
-                      <Badge
-                        key={cat.title}
-                        variant="outline"
-                        className="text-xs font-medium py-0.5"
-                      >
-                        {cat.title}
-                      </Badge>
-                    ))}
+                    {post.categories.map(
+                      (cat: NonNullable<Post["categories"]>[number]) => (
+                        <Badge
+                          key={cat.title ?? undefined}
+                          variant="outline"
+                          className="text-xs font-medium py-0.5"
+                        >
+                          {cat.title}
+                        </Badge>
+                      ),
+                    )}
                   </div>
                 )}
                 {post.tags && post.tags.length > 0 && (
@@ -164,15 +174,17 @@ export default async function PostPage({
                       className="size-3.5 shrink-0 text-muted-foreground"
                       aria-hidden
                     />
-                    {post.tags.map((tag) => (
-                      <Badge
-                        key={tag.title}
-                        variant="secondary"
-                        className="text-xs font-medium py-0.5"
-                      >
-                        {tag.title}
-                      </Badge>
-                    ))}
+                    {post.tags.map(
+                      (tag: NonNullable<Post["tags"]>[number]) => (
+                        <Badge
+                          key={tag.title ?? undefined}
+                          variant="secondary"
+                          className="text-xs font-medium py-0.5"
+                        >
+                          {tag.title}
+                        </Badge>
+                      ),
+                    )}
                   </div>
                 )}
               </div>

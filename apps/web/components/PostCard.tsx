@@ -44,7 +44,7 @@ export function PostCard({ post }: PostCardProps) {
         day: "numeric",
       })
     : null;
-  const postHref = `posts/${post.slug?.current ?? ""}`;
+  const postHref = `/posts/${post.slug?.current ?? ""}`;
   const authorSlug = (
     post.author as { slug?: { current?: string } } | null | undefined
   )?.slug?.current;

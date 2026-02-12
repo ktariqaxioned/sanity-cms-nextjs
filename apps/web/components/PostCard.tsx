@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import type { POSTS_QUERY_RESULT } from "@/lib/sanity/query";
+import type { POSTS_QUERY_RESULT } from "@/lib/sanity/sanity.types";
 import { Award, BookOpen, Tag, User } from "lucide-react";
 
 /** CMS badge value → display label (matches postType.ts options) */

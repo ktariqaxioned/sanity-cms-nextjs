@@ -29,7 +29,7 @@ const POST_BASE_PROJECTION = groq`
   slug,
   publishedAt,
   badges,
-  author->{ name, avatar },
+  author->{ name, avatar, slug },
   categories[]->{ title },
   tags[]->{ title },
   ${IMAGE_PROJECTION}
@@ -75,9 +75,59 @@ export const POST_SLUGS_QUERY = groq`
   }
 `;
 
+/**
+ * Avatar projection for author queries
+ */
+// @sanity-typegen-ignore
+const AVATAR_PROJECTION = groq`
+  avatar{
+    asset->{
+      _id,
+      url,
+      metadata{ dimensions{ width, height } }
+    }
+  }
+`;
+
+/**
+ * Query to fetch a single author by slug
+ */
+export const AUTHOR_BY_SLUG_QUERY = groq`
+  *[_type == "author" && slug.current == $slug][0]{
+    _id,
+    name,
+    slug,
+    bio,
+    ${AVATAR_PROJECTION}
+  }
+`;
+
+/**
+ * Query to fetch all author slugs for static generation
+ */
+export const AUTHOR_SLUGS_QUERY = groq`
+  *[_type == "author" && defined(slug.current)]{
+    "slug": slug.current
+  }
+`;
+
+/**
+ * Query to fetch posts by author slug
+ */
+export const POSTS_BY_AUTHOR_SLUG_QUERY = groq`
+  *[
+    _type == "post" &&
+    defined(slug.current) &&
+    author->slug.current == $slug
+  ]
+  | order(publishedAt desc)[0...20]{
+    ${POST_BASE_PROJECTION}
+  }
+`;
+
 // Re-export generated TypeGen result types for convenience
 export type {
   POSTS_QUERY_RESULT,
   POST_BY_SLUG_QUERY_RESULT,
   POST_SLUGS_QUERY_RESULT,
-} from "@/sanity.types";
+} from "@/lib/sanity/sanity.types";

@@ -60,6 +60,10 @@ export default async function PostPage({ params }: PostPageProps) {
       })
     : null;
 
+  const authorSlug = (
+    post.author as { slug?: { current?: string } } | null | undefined
+  )?.slug?.current;
+
   return (
     <main className="container mx-auto min-h-screen max-w-4xl px-4 py-8 md:px-6 lg:px-8">
       <div className="mb-6">
@@ -87,27 +91,32 @@ export default async function PostPage({ params }: PostPageProps) {
         <CardHeader className="space-y-4">
           <div className="flex flex-col gap-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              {post.author?.name && (
-                <span className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Avatar size="default">
-                    <AvatarImage
-                      src={
-                        post.author.avatar?.asset
-                          ? (urlFor(post.author.avatar)
-                              ?.width(60)
-                              .height(60)
-                              .url() ?? "")
-                          : undefined
-                      }
-                      alt=""
-                    />
-                    <AvatarFallback>
-                      <User className="size-3.5" aria-hidden />
-                    </AvatarFallback>
-                  </Avatar>
-                  <span>{post.author.name}</span>
-                </span>
-              )}
+              <Link
+                href={`/authors/${authorSlug}`}
+                className="flex items-center gap-2 hover:underline"
+              >
+                {post.author?.name && (
+                  <span className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Avatar size="default">
+                      <AvatarImage
+                        src={
+                          post.author.avatar?.asset
+                            ? (urlFor(post.author.avatar)
+                                ?.width(60)
+                                .height(60)
+                                .url() ?? "")
+                            : undefined
+                        }
+                        alt=""
+                      />
+                      <AvatarFallback>
+                        <User className="size-3.5" aria-hidden />
+                      </AvatarFallback>
+                    </Avatar>
+                    <span>{post.author.name}</span>
+                  </span>
+                )}
+              </Link>
               {publishedDate && (
                 <Badge
                   variant="outline"
@@ -174,17 +183,15 @@ export default async function PostPage({ params }: PostPageProps) {
                       className="size-3.5 shrink-0 text-muted-foreground"
                       aria-hidden
                     />
-                    {post.tags.map(
-                      (tag: NonNullable<Post["tags"]>[number]) => (
-                        <Badge
-                          key={tag.title ?? undefined}
-                          variant="secondary"
-                          className="text-xs font-medium py-0.5"
-                        >
-                          {tag.title}
-                        </Badge>
-                      ),
-                    )}
+                    {post.tags.map((tag: NonNullable<Post["tags"]>[number]) => (
+                      <Badge
+                        key={tag.title ?? undefined}
+                        variant="secondary"
+                        className="text-xs font-medium py-0.5"
+                      >
+                        {tag.title}
+                      </Badge>
+                    ))}
                   </div>
                 )}
               </div>

@@ -15,41 +15,61 @@ const DEFAULT_MENU = [
 ];
 
 function isExternal(href: string) {
-  return href.startsWith("http://") || href.startsWith("https://") || href.startsWith("//");
+  return (
+    href.startsWith("http://") ||
+    href.startsWith("https://") ||
+    href.startsWith("//")
+  );
 }
 
-function NavLink({
-  label,
-  href,
-}: {
-  label: string;
-  href: string;
-}) {
+const navLinkClass = cn(
+  "relative inline-block text-sm text-muted-foreground transition-colors hover:text-foreground",
+  "after:absolute after:left-0 after:bottom-0 after:block after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-200 hover:after:scale-x-100"
+);
+
+function NavLink({ label, href }: { label: string; href: string }) {
   const external = isExternal(href);
-  const linkClass = "text-sm text-muted-foreground transition-colors hover:text-foreground";
   if (external) {
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={linkClass}>
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={navLinkClass}
+      >
         {label}
       </a>
     );
   }
-  return <Link href={href} className={linkClass}>{label}</Link>;
+  return (
+    <Link href={href} className={navLinkClass}>
+      {label}
+    </Link>
+  );
 }
 
 export function Navbar({ data, className }: NavbarProps) {
-  const menu = data?.menu?.length ? data.menu : DEFAULT_MENU.map((item, i) => ({ ...item, _key: `default-${i}`, _type: "menuItem" as const }));
+  const menu = data?.menu?.length
+    ? data.menu
+    : DEFAULT_MENU.map((item, i) => ({
+        ...item,
+        _key: `default-${i}`,
+        _type: "menuItem" as const,
+      }));
   const ctaButton = data?.ctaButton;
 
   return (
     <header
       className={cn(
         "sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60",
-        className
+        className,
       )}
     >
-      <nav className="container mx-auto flex h-14 items-center justify-between px-4">
-        <Link href="/" className="font-semibold text-foreground hover:opacity-80">
+      <nav className="container mx-auto flex h-14 items-center justify-between px-8 ">
+        <Link
+          href="/"
+          className="font-semibold text-foreground hover:opacity-80"
+        >
           Blog
         </Link>
 
@@ -68,7 +88,11 @@ export function Navbar({ data, className }: NavbarProps) {
           {ctaButton?.label && ctaButton?.href ? (
             <Button asChild size="sm" variant="default">
               {isExternal(ctaButton.href) ? (
-                <a href={ctaButton.href} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={ctaButton.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {ctaButton.label}
                 </a>
               ) : (

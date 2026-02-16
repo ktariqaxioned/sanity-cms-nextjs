@@ -5,6 +5,10 @@ import { VisualEditing } from "next-sanity/visual-editing";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { DisableDraftMode } from "@/components/DisableDraftMode";
+import { Navbar } from "@/components/Navbar";
+import { client } from "@/lib/sanity/client";
+import { NAVBAR_QUERY } from "@/lib/sanity/query";
+import type { Navbar as NavbarType } from "@/lib/sanity/sanity.types";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,6 +31,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const dm = await draftMode();
+  const navbar = await client.fetch<NavbarType | null>(NAVBAR_QUERY, {}, {
+    perspective: dm.isEnabled ? "previewDrafts" : "published",
+    next: { revalidate: dm.isEnabled ? 0 : 30 },
+  });
 
   return (
     <html lang="en">
@@ -34,6 +42,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Navbar data={navbar} />
           {children}
 
           {dm.isEnabled && (

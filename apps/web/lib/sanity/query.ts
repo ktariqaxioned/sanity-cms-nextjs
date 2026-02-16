@@ -112,6 +112,18 @@ export const AUTHOR_SLUGS_QUERY = groq`
 `;
 
 /**
+ * Query to fetch all authors for the authors index page
+ */
+export const AUTHORS_LIST_QUERY = groq`
+  *[_type == "author" && defined(slug.current)] | order(name asc){
+    _id,
+    name,
+    slug,
+    ${AVATAR_PROJECTION}
+  }
+`;
+
+/**
  * Query to fetch posts by author slug
  */
 export const POSTS_BY_AUTHOR_SLUG_QUERY = groq`
@@ -122,6 +134,37 @@ export const POSTS_BY_AUTHOR_SLUG_QUERY = groq`
   ]
   | order(publishedAt desc)[0...20]{
     ${POST_BASE_PROJECTION}
+  }
+`;
+
+/**
+ * Query to fetch the navbar singleton (Site Configuration > Navigation)
+ */
+export const NAVBAR_QUERY = groq`
+  *[_type == "navbar" && _id == "navbar"][0]{
+    _id,
+    label,
+    menu[]{
+      _key,
+      _type,
+      label,
+      href
+    },
+    ctaButton{
+      label,
+      href
+    }
+  }
+`;
+
+/**
+ * Query to fetch settings singleton for site title (optional)
+ */
+export const SETTINGS_QUERY = groq`
+  *[_type == "settings" && _id == "settings"][0]{
+    _id,
+    siteTitle,
+    siteDescription
   }
 `;
 
